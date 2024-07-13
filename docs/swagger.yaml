@@ -1,0 +1,393 @@
+basePath: /
+definitions:
+  dtos.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  dtos.Match:
+    properties:
+      awayTeam:
+        type: string
+      awayTeamScore:
+        type: integer
+      hostTeam:
+        type: string
+      hostTeamScore:
+        type: integer
+    type: object
+  dtos.Player:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      position:
+        type: string
+      teamID:
+        type: integer
+      value:
+        type: integer
+    type: object
+  dtos.Team:
+    properties:
+      capacityOfPlayer:
+        type: integer
+      drawn:
+        type: integer
+      id:
+        type: integer
+      leagueID:
+        type: integer
+      lost:
+        type: integer
+      name:
+        type: string
+      point:
+        type: integer
+      score:
+        type: integer
+      title:
+        type: integer
+      valueOfPlayers:
+        type: number
+      won:
+        type: integer
+    type: object
+  dtos.TeamPosition:
+    properties:
+      club:
+        type: string
+      drawn:
+        type: integer
+      lost:
+        type: integer
+      points:
+        type: integer
+      position:
+        type: integer
+      won:
+        type: integer
+    type: object
+  dtos.TeamPrediction:
+    properties:
+      odds:
+        type: number
+      teamName:
+        type: string
+    type: object
+  dtos.WeeklyResult:
+    properties:
+      matches:
+        items:
+          $ref: '#/definitions/dtos.Match'
+        type: array
+      week:
+        type: integer
+    type: object
+  models.League:
+    properties:
+      id:
+        type: integer
+      limit_of_teams:
+        type: integer
+      names:
+        type: string
+      teams:
+        items:
+          $ref: '#/definitions/models.Team'
+        type: array
+      weeks:
+        type: integer
+    type: object
+  models.Player:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      position:
+        type: string
+      team_id:
+        type: integer
+      value:
+        type: integer
+    type: object
+  models.Team:
+    properties:
+      capacity_of_players:
+        type: integer
+      deuces:
+        type: integer
+      id:
+        type: integer
+      league_id:
+        type: integer
+      loses:
+        type: integer
+      names:
+        type: string
+      players:
+        items:
+          $ref: '#/definitions/models.Player'
+        type: array
+      points:
+        type: integer
+      scores:
+        type: integer
+      titles:
+        type: integer
+      value_of_players:
+        type: number
+      wins:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for managing leagues.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: League Management API
+  version: "1.0"
+paths:
+  /leagues/:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all leagues
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.League'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dtos.ErrorResponse'
+      summary: Get all leagues
+      tags:
+      - leagues
+  /leagues/add:
+    post:
+      consumes:
+      - application/json
+      description: Create a new league
+      parameters:
+      - description: League to create
+        in: body
+        name: league
+        required: true
+        schema:
+          $ref: '#/definitions/models.League'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.League'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dtos.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dtos.ErrorResponse'
+      summary: Create a new league
+      tags:
+      - leagues
+  /leagues/league-table:
+    get:
+      consumes:
+      - application/json
+      description: Get the current league table
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dtos.TeamPosition'
+            type: array
+      summary: Get league table
+      tags:
+      - leagues
+  /leagues/play-all-week:
+    get:
+      consumes:
+      - application/json
+      description: Simulate all remaining weeks and update the league
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dtos.TeamPosition'
+            type: array
+      summary: Play all remaining weeks
+      tags:
+      - leagues
+  /leagues/play-one-week:
+    get:
+      consumes:
+      - application/json
+      description: Simulate one week of matches and update the league
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dtos.WeeklyResult'
+      summary: Play one week of matches
+      tags:
+      - leagues
+  /leagues/prediction:
+    get:
+      consumes:
+      - application/json
+      description: Get the current championship predictions for each team
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dtos.TeamPrediction'
+            type: array
+      summary: Get championship predictions
+      tags:
+      - leagues
+  /leagues/reset:
+    get:
+      consumes:
+      - application/json
+      description: Reset all league data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dtos.ErrorResponse'
+      summary: Reset the league
+      tags:
+      - leagues
+  /players/:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all players
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dtos.Player'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dtos.ErrorResponse'
+      summary: Get all players
+      tags:
+      - players
+  /players/add:
+    post:
+      consumes:
+      - application/json
+      description: Create a new player
+      parameters:
+      - description: Player to create
+        in: body
+        name: player
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.Player'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dtos.Player'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dtos.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dtos.ErrorResponse'
+      summary: Create a new player
+      tags:
+      - players
+  /teams/:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all teams
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dtos.Team'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dtos.ErrorResponse'
+      summary: Get all teams
+      tags:
+      - teams
+  /teams/add:
+    post:
+      consumes:
+      - application/json
+      description: Create a new team
+      parameters:
+      - description: Team to create
+        in: body
+        name: team
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.Team'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dtos.Team'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dtos.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dtos.ErrorResponse'
+      summary: Create a new team
+      tags:
+      - teams
+swagger: "2.0"
