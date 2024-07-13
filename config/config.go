@@ -12,11 +12,11 @@ import (
 var DB *gorm.DB
 
 func DatabaseConnection() {
-	dbHost := os.Getenv("DB_HOST")
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbName := os.Getenv("DB_NAME")
-	dbPort := os.Getenv("DB_PORT")
+	dbHost := os.Getenv("PG_HOST")
+	dbUser := os.Getenv("PG_USER")
+	dbPassword := os.Getenv("PG_PASSWORD")
+	dbName := os.Getenv("PG_DATABASE")
+	dbPort := os.Getenv("PG_PORT")
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
 		dbHost, dbUser, dbPassword, dbName, dbPort)
