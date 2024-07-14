@@ -6,10 +6,10 @@ services:
     container_name: postgres
     environment:
       PG_USER: postgres
-      PG_PASSWORD: dguhcBQuzYsrTyAtvJctavafrZevXMkG
+      PG_PASSWORD: dbWIOVHoEoUMyZfmLvJtNFajzpVSonKUD
       PG_DATABASE: railway
     ports:
-      - "5432:5432"
+      - "26983:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -23,9 +23,9 @@ services:
     environment:
       PG_HOST: db
       PG_USER: postgres
-      PG_PASSWORD: dguhcBQuzYsrTyAtvJctavafrZevXMkG
+      PG_PASSWORD: bWIOVHoEoUMyZfmLvJtNFajzpVSonKUD
       PG_DATABASE: railway
-      PG_PORT: 18072
+      PG_PORT: 26983
     command: ["./main"]
 
 volumes:
